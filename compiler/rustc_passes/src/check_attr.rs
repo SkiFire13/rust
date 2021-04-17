@@ -813,6 +813,14 @@ impl CheckAttrVisitor<'tcx> {
                 self.inline_attr_str_error_with_macro_def(hir_id, attr, "export_name");
                 true
             }
+            Target::ForeignFn | Target::ForeignStatic => {
+                self.tcx
+                    .sess
+                    .struct_span_err(attr.span, "attribute has no effect on foreign items")
+                    .span_label(*span, "not a local function or static")
+                    .emit();
+                false
+            }
             _ => {
                 self.tcx
                     .sess
@@ -1055,6 +1063,20 @@ impl CheckAttrVisitor<'tcx> {
             Target::Field | Target::Arm | Target::MacroDef => {
                 self.inline_attr_str_error_with_macro_def(hir_id, attr, "link_section");
             }
+            Target::ForeignFn | Target::ForeignStatic => {
+                // FIXME: #[no_mangle] was previously allowed on non-functions/statics and some
+                // crates used this, so only emit a warning.
+                self.tcx.struct_span_lint_hir(UNUSED_ATTRIBUTES, hir_id, attr.span, |lint| {
+                    lint.build("attribute has no effect on foreign items")
+                        .warn(
+                            "this was previously accepted by the compiler but is \
+                             being phased out; it will become a hard error in \
+                             a future release!",
+                        )
+                        .span_label(*span, "not a local function or static")
+                        .emit();
+                });
+            }
             _ => {
                 // FIXME: #[link_section] was previously allowed on non-functions/statics and some
                 // crates used this, so only emit a warning.
@@ -1082,6 +1104,20 @@ impl CheckAttrVisitor<'tcx> {
             // with crates depending on them, we can't throw an error here.
             Target::Field | Target::Arm | Target::MacroDef => {
                 self.inline_attr_str_error_with_macro_def(hir_id, attr, "no_mangle");
+            }
+            Target::ForeignFn | Target::ForeignStatic => {
+                // FIXME: #[no_mangle] was previously allowed on non-functions/statics and some
+                // crates used this, so only emit a warning.
+                self.tcx.struct_span_lint_hir(UNUSED_ATTRIBUTES, hir_id, attr.span, |lint| {
+                    lint.build("attribute has no effect on foreign items")
+                        .warn(
+                            "this was previously accepted by the compiler but is \
+                             being phased out; it will become a hard error in \
+                             a future release!",
+                        )
+                        .span_label(*span, "not a local function or static")
+                        .emit();
+                });
             }
             _ => {
                 // FIXME: #[no_mangle] was previously allowed on non-functions/statics and some
