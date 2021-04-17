@@ -355,6 +355,18 @@ mod no_mangle {
     //~^ WARN attribute should be applied to a function or static [unused_attributes]
     //~| WARN this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
     //~| NOTE not a function or static
+
+    extern {
+        #[no_mangle] fn g();
+        //~^ WARN attribute has no effect on foreign items [unused_attributes]
+        //~| WARN this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+        //~| NOTE not a local function or static
+
+        #[no_mangle] static STATIK: u8;
+        //~^ WARN attribute has no effect on foreign items [unused_attributes]
+        //~| WARN this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+        //~| NOTE not a local function or static
+    }
 }
 
 #[should_panic]
@@ -591,6 +603,18 @@ mod link_section {
     //~^ WARN attribute should be applied to a function or static [unused_attributes]
     //~| WARN this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
     //~| NOTE not a function or static
+
+    extern {
+        #[link_section = "1800"] fn g();
+        //~^ WARN attribute has no effect on foreign items [unused_attributes]
+        //~| WARN this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+        //~| NOTE not a local function or static
+
+        #[link_section = "1800"] static STATIK: u8;
+        //~^ WARN attribute has no effect on foreign items [unused_attributes]
+        //~| WARN this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+        //~| NOTE not a local function or static
+    }
 }
 
 

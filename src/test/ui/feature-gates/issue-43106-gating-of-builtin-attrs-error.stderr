@@ -9,61 +9,61 @@ LL |     #[inline = "2100"] fn f() { }
    = note: for more information, see issue #57571 <https://github.com/rust-lang/rust/issues/57571>
 
 error: `main` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:109:1
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:119:1
    |
 LL | #[main]
    | ^^^^^^^
 
 error: `main` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:112:17
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:122:17
    |
 LL |     mod inner { #![main] }
    |                 ^^^^^^^^
 
 error: `main` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:117:5
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:127:5
    |
 LL |     #[main] struct S;
    |     ^^^^^^^
 
 error: `main` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:120:5
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:130:5
    |
 LL |     #[main] type T = S;
    |     ^^^^^^^
 
 error: `main` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:123:5
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:133:5
    |
 LL |     #[main] impl S { }
    |     ^^^^^^^
 
 error: `start` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:127:1
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:137:1
    |
 LL | #[start]
    | ^^^^^^^^
 
 error: `start` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:130:17
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:140:17
    |
 LL |     mod inner { #![start] }
    |                 ^^^^^^^^^
 
 error: `start` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:135:5
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:145:5
    |
 LL |     #[start] struct S;
    |     ^^^^^^^^
 
 error: `start` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:138:5
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:148:5
    |
 LL |     #[start] type T = S;
    |     ^^^^^^^^
 
 error: `start` attribute can only be used on functions
-  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:141:5
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:151:5
    |
 LL |     #[start] impl S { }
    |     ^^^^^^^^
@@ -109,7 +109,7 @@ LL | |
 LL | |
 LL | |     mod inner { #![export_name="2200"] }
 ...  |
-LL | |
+LL | |     }
 LL | | }
    | |_- not a function or static
 
@@ -245,6 +245,18 @@ error: attribute should be applied to a function or static
 LL |     #[export_name = "2200"] impl S { }
    |     ^^^^^^^^^^^^^^^^^^^^^^^ ---------- not a function or static
 
-error: aborting due to 36 previous errors
+error: attribute has no effect on foreign items
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:109:9
+   |
+LL |         #[export_name = "2200"] fn g();
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ ------- not a local function or static
+
+error: attribute has no effect on foreign items
+  --> $DIR/issue-43106-gating-of-builtin-attrs-error.rs:113:9
+   |
+LL |         #[export_name = "2200"] static STATIK: u8;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ ------------------ not a local function or static
+
+error: aborting due to 38 previous errors
 
 For more information about this error, try `rustc --explain E0518`.

@@ -104,6 +104,16 @@ mod export_name {
     #[export_name = "2200"] impl S { }
     //~^ ERROR attribute should be applied to a function or static
     //~| NOTE not a function or static
+
+    extern {
+        #[export_name = "2200"] fn g();
+        //~^ ERROR attribute has no effect on foreign items
+        //~| NOTE not a local function or static
+
+        #[export_name = "2200"] static STATIK: u8;
+        //~^ ERROR attribute has no effect on foreign items
+        //~| NOTE not a local function or static
+    }
 }
 
 #[main]
